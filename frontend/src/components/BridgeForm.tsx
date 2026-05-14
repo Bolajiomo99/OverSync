@@ -47,96 +47,6 @@ const ETH_TO_XLM_RATE = 10000; // 1 ETH = 10,000 XLM
 // Network configuration
 const MAINNET_CHAIN_ID = '0x1'; // Ethereum Mainnet (1)
 
-// Helper function to fetch real-time crypto prices with adaptive rate limiting
-const fetchCryptoPrices = async (currentInterval: number, rateLimitCount: number, 
-  setUpdateInterval: (interval: number) => void, setRateLimitCount: (count: number) => void, 
-  setLastRateLimitTime: (time: Date | null) => void) => {
-  try {
-    const response = await fetch(
-      'https://api.coingecko.com/api/v3/simple/price?ids=ethereum,stellar&vs_currencies=usd'
-    );
-    
-    // Check for rate limiting
-    if (response.status === 429) {
-      const newRateLimitCount = rateLimitCount + 1;
-      const newInterval = Math.min(currentInterval * 2, 60000); // Max 60 seconds
-      
-      setRateLimitCount(newRateLimitCount);
-      setLastRateLimitTime(new Date());
-      setUpdateInterval(newInterval);
-      
-      // Return fallback data
-      return {
-        ethPrice: null,
-        xlmPrice: null,
-        ethToXlmRate: ETH_TO_XLM_RATE,
-        success: false,
-        rateLimited: true,
-        newInterval
-      };
-    }
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-    
-    const prices = await response.json();
-    
-    const ethPrice = prices.ethereum?.usd;
-    const xlmPrice = prices.stellar?.usd;
-    
-    if (!ethPrice || !xlmPrice) {
-      throw new Error('Price data incomplete');
-    }
-    
-    // Calculate ETH to XLM rate: 1 ETH = how many XLM
-    const ethToXlmRate = ethPrice / xlmPrice;
-    
-    // Log price update (only in development)
-    if (import.meta.env.DEV) {
-      console.log('💱 Exchange Rate Update:', `1 ETH = ${ethToXlmRate.toFixed(2)} XLM`);
-    }
-    
-    // Success! Try to decrease interval if it was previously increased
-    if (currentInterval > 5000 && rateLimitCount > 0) {
-      const newInterval = Math.max(currentInterval * 0.8, 5000); // Gradually decrease, min 5 seconds
-      if (newInterval !== currentInterval) {
-        console.log(`✅ API healthy, decreasing interval: ${currentInterval}ms → ${newInterval}ms`);
-        setUpdateInterval(newInterval);
-        
-        // Reset rate limit count after successful recovery
-        if (newInterval === 5000) {
-          setRateLimitCount(0);
-          setLastRateLimitTime(null);
-          console.log('🎉 Fully recovered from rate limiting!');
-        }
-      }
-    }
-    
-    return {
-      ethPrice,
-      xlmPrice,
-      ethToXlmRate,
-      success: true,
-      rateLimited: false,
-      newInterval: currentInterval
-    };
-    
-  } catch (error) {
-    console.error('❌ Failed to fetch crypto prices:', error);
-    
-    // Fallback to fixed rate
-    return {
-      ethPrice: null,
-      xlmPrice: null,
-      ethToXlmRate: ETH_TO_XLM_RATE,
-      success: false,
-      rateLimited: false,
-      newInterval: currentInterval
-    };
-  }
-};
-
 // Helper function to save transaction to localStorage for history
 const saveTransactionToHistory = (transaction: {
   orderId: string;
@@ -287,11 +197,6 @@ export default function BridgeForm({ ethAddress, stellarAddress }: BridgeFormPro
   const [exchangeRate, setExchangeRate] = useState<number>(ETH_TO_XLM_RATE);
   const [isLoadingRate, setIsLoadingRate] = useState(false);
   const [rateLastUpdated, setRateLastUpdated] = useState<Date | null>(null);
-  
-  // Adaptive rate limiting state
-  const [updateInterval, setUpdateInterval] = useState<number>(5000); // Start with 5 seconds
-  const [rateLimitCount, setRateLimitCount] = useState<number>(0);
-  const [lastRateLimitTime, setLastRateLimitTime] = useState<Date | null>(null);
   
   // Freighter hook for Stellar transactions
   const { signTransaction } = useFreighter();
@@ -1361,11 +1266,11 @@ export default function BridgeForm({ ethAddress, stellarAddress }: BridgeFormPro
             <div>~1 min</div>
           </div>
           
-          {/* Real-time Exchange Rate Info */}
+          {/* Exchange Rate Info */}
           <div className="bg-[#3ABEFF]/10 border border-[#3ABEFF]/20 rounded-xl p-2">
             <div className="flex items-center justify-between mb-1">
               <div className="text-blue-400 font-medium text-xs">
-                💱 Live Exchange Rate
+                💱 Exchange Rate
               </div>
               {isLoadingRate ? (
                 <div className="flex items-center gap-1 text-blue-400 text-xs">
@@ -1381,22 +1286,9 @@ export default function BridgeForm({ ethAddress, stellarAddress }: BridgeFormPro
             <div className="text-white text-xs">
               1 ETH = {exchangeRate.toLocaleString(undefined, { maximumFractionDigits: 2 })} XLM
             </div>
-            <div className="flex items-center justify-between mt-1">
-              <div className="text-gray-400 text-xs">
-                Updates when you enter amount (CoinGecko API)
-              </div>
-              {rateLimitCount > 0 && (
-                <div className="flex items-center gap-1 text-yellow-400 text-xs">
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                  Rate limited ({rateLimitCount}x)
-                </div>
-              )}
+            <div className="text-gray-400 text-xs mt-1">
+              Using fallback rate (live pricing coming soon)
             </div>
-            {lastRateLimitTime && (
-              <div className="text-yellow-300 text-xs mt-1">
-                ⚠️ Last rate limit: {new Date(lastRateLimitTime).toLocaleTimeString()}
-              </div>
-            )}
           </div>
           
           {/* Status Message */}
