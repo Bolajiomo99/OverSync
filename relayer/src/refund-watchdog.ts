@@ -13,7 +13,7 @@
  * one bad order can't take down the entire timer.
  */
 
-import { refundXlmToUser, type RefundNetworkMode } from './xlm-refund';
+import { refundXlmToUser, type RefundNetworkMode } from './xlm-refund.js';
 
 const DEFAULT_INTERVAL_MS = 60_000; // 1 minute
 const DEFAULT_STALE_AFTER_MS = 5 * 60_000; // 5 minutes

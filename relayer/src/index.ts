@@ -11,7 +11,7 @@ import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { ethers } from 'ethers';
-import { startRefundWatchdog } from './refund-watchdog';
+import { startRefundWatchdog } from './refund-watchdog.js';
 
 // Load environment variables from root directory
 config({ path: resolve(process.cwd(), '../.env') });
