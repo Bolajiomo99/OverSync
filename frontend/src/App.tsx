@@ -385,7 +385,7 @@ function App() {
           </div>
         </section>
 
-        <section className="w-full">
+        <section className="w-full lg:w-[640px] lg:max-w-none lg:justify-self-start">
           {/* Tab Navigation */}
           <div className="mb-4 flex justify-center lg:justify-end">
             <div className="segmented-control">

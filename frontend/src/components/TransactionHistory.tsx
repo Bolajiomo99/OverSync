@@ -237,8 +237,8 @@ export default function TransactionHistory({ ethAddress, stellarAddress }: Trans
   };
 
   return (
-    <div className="surface-panel rounded-[1.25rem] p-4 shadow-[0_24px_90px_rgba(0,0,0,0.36)] md:p-6">
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="surface-panel flex max-h-[calc(100vh-10rem)] min-h-0 flex-col overflow-hidden rounded-[1.25rem] p-4 shadow-[0_24px_90px_rgba(0,0,0,0.36)] md:p-6 lg:max-h-[calc(100vh-13rem)]">
+      <div className="mb-6 flex shrink-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-slate-500">Ledger</p>
           <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">Transaction History</h2>
@@ -256,7 +256,7 @@ export default function TransactionHistory({ ethAddress, stellarAddress }: Trans
         </button>
       </div>
 
-      <div className="mb-6 flex gap-2 overflow-x-auto pb-1">
+      <div className="mb-4 flex shrink-0 gap-2 overflow-x-auto pb-1">
         {[
           { key: 'all', label: 'All' },
           { key: 'pending', label: 'Pending' },
@@ -277,7 +277,7 @@ export default function TransactionHistory({ ethAddress, stellarAddress }: Trans
         ))}
       </div>
 
-      <div className="space-y-3">
+      <div className="min-h-0 space-y-3 overflow-y-auto overscroll-contain pr-1">
         {filteredTransactions.length === 0 ? (
           <div className="rounded-2xl border border-white/10 bg-white/[0.035] py-12 text-center">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.045]">
