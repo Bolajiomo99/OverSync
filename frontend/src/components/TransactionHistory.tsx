@@ -151,13 +151,25 @@ export default function TransactionHistory({ ethAddress, stellarAddress }: Trans
   );
 
   const openEtherscan = (txHash: string) => {
+    if (!txHash) {
+      console.error('❌ No ETH transaction hash provided');
+      return;
+    }
     const base = isTestnet() ? 'https://sepolia.etherscan.io' : 'https://etherscan.io';
-    window.open(`${base}/tx/${txHash}`, '_blank', 'noopener,noreferrer');
+    const url = `${base}/tx/${txHash}`;
+    console.log('🔗 Opening Etherscan:', url);
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const openStellarExplorer = (txHash: string) => {
+    if (!txHash) {
+      console.error('❌ No Stellar transaction hash provided');
+      return;
+    }
     const network = isTestnet() ? 'testnet' : 'public';
-    window.open(`https://stellar.expert/explorer/${network}/tx/${txHash}`, '_blank', 'noopener,noreferrer');
+    const url = `https://stellar.expert/explorer/${network}/tx/${txHash}`;
+    console.log('🔗 Opening Stellar Explorer:', url);
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
