@@ -458,28 +458,21 @@ export default function BridgeForm({ ethAddress, stellarAddress }: BridgeFormPro
       return;
     }
 
-    // Fetch fresh exchange rate when user enters amount
+    // TEMPORARY: Skip CoinGecko API due to CORS issues in production
+    // Just use fallback rate directly for now
     const updateRateAndCalculate = async () => {
       setIsLoadingRate(true);
-      console.log('💱 Fetching fresh exchange rate for amount calculation...');
+      console.log('💱 Using fallback exchange rate (CoinGecko CORS issue)...');
       
-      const priceData = await fetchCryptoPrices(updateInterval, rateLimitCount, setUpdateInterval, setRateLimitCount, setLastRateLimitTime);
-      
-      // Update rate state
-      setExchangeRate(priceData.ethToXlmRate);
+      // Use fallback rate directly
+      const rate = ETH_TO_XLM_RATE;
+      setExchangeRate(rate);
       setRateLastUpdated(new Date());
       setIsLoadingRate(false);
       
-      if (priceData.success) {
-        console.log('✅ Fresh exchange rate fetched:', priceData.ethToXlmRate.toFixed(2), 'XLM per ETH');
-      } else if (priceData.rateLimited) {
-        console.log(`⚠️ Rate limited, using fallback rate. New interval: ${priceData.newInterval}ms`);
-      } else {
-        console.log('⚠️ Using fallback exchange rate:', priceData.ethToXlmRate);
-      }
+      console.log('⚠️ Using fallback exchange rate:', rate);
       
-      // Calculate equivalent amount with fresh rate
-      const rate = priceData.ethToXlmRate;
+      // Calculate equivalent amount with fallback rate
       const inputAmount = parseFloat(amount);
       
       if (direction === 'eth_to_xlm') {
@@ -496,7 +489,7 @@ export default function BridgeForm({ ethAddress, stellarAddress }: BridgeFormPro
     };
 
     updateRateAndCalculate();
-  }, [amount, direction, updateInterval, rateLimitCount]); // Fetch when amount or direction changes
+  }, [amount, direction]); // Fetch when amount or direction changes
   
   // Yön değiştirme
   const handleSwapDirection = () => {
