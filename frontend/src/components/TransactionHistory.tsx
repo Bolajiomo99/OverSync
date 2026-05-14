@@ -38,6 +38,10 @@ interface TransactionHistoryProps {
 }
 
 const STORAGE_KEY = 'oversync_transactions_v2';
+const RENDER_API_BASE_URL = 'https://oversync-1nchfusion-2.onrender.com';
+const API_BASE_URL = import.meta.env.PROD
+  ? ''
+  : (import.meta as any).env?.VITE_API_BASE_URL || RENDER_API_BASE_URL;
 
 // Hash patterns that indicate fabricated/demo data, used to filter out legacy entries
 // persisted by older builds. New entries can never match these because v2 only stores
@@ -83,8 +87,8 @@ export default function TransactionHistory({ ethAddress, stellarAddress }: Trans
   }, []);
 
   const refreshFromCoordinator = useCallback(async () => {
-    const apiBase = (import.meta as any).env?.VITE_API_BASE_URL;
-    if (!apiBase || (!ethAddress && !stellarAddress)) {
+    const apiBase = API_BASE_URL;
+    if (!ethAddress && !stellarAddress) {
       setTransactions(loadFromStorage());
       return;
     }

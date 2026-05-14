@@ -150,7 +150,10 @@ const updateTransactionStatus = (orderId: string, status: 'pending' | 'completed
 };
 
 const SEPOLIA_CHAIN_ID = '0xaa36a7'; // 11155111 in hex
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://oversync-1nchfusion-2.onrender.com';
+const RENDER_API_BASE_URL = 'https://oversync-1nchfusion-2.onrender.com';
+const API_BASE_URL = import.meta.env.PROD
+  ? ''
+  : import.meta.env.VITE_API_BASE_URL || RENDER_API_BASE_URL;
 const ENABLE_MOCK_DATA = import.meta.env.VITE_ENABLE_MOCK_DATA === 'true';
 
 export default function BridgeForm({ ethAddress, stellarAddress }: BridgeFormProps) {
