@@ -7,6 +7,7 @@ import { ToastContainer, useToast } from './components/Toast'
 import { useFreighter } from './hooks/useFreighter'
 import { useNetworkMode } from './lib/useNetworkMode'
 import NetworkMismatchBanner from './components/NetworkMismatchBanner'
+import MainnetVersionBanner from './components/MainnetVersionBanner'
 
 // Window objeleri için type definitions
 declare global {
@@ -306,6 +307,7 @@ function App() {
       </nav>
 
       <NetworkMismatchBanner networkState={networkState} />
+      <MainnetVersionBanner networkState={networkState} />
 
       {/* Hero Section */}
       <div className="text-center py-8 px-6">

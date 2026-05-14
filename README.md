@@ -12,6 +12,23 @@ both chains.
 > v1 code remains in `relayer/`, `stellar/`, and `frontend/` until the
 > v2 modules reach feature parity.
 
+## Where v2 runs today
+
+v2 is **live on testnet** (Sepolia + Stellar testnet). v2 mainnet
+deployment is gated on a clean third-party audit and scheduled for **Q1
+2027** ([see ROADMAP](ROADMAP.md)). The mainnet bridge today continues
+to run the **v1 single-relayer stack** so existing users have a working
+path while the v2 contracts mature. The frontend surfaces this clearly:
+selecting mainnet shows a banner explaining the v1 trust model and a
+one-click switch to the v2 testnet experience.
+
+Deployed v2 contracts (testnet):
+
+- EVM HTLCEscrow: [`0xb352339BEb146f2699d28D736700B953988bB178`](https://sepolia.etherscan.io/address/0xb352339BEb146f2699d28D736700B953988bB178)
+- EVM ResolverRegistry: [`0x7D9ce70Aa40E144E8BbE266a0dc3b3F91B6D1D99`](https://sepolia.etherscan.io/address/0x7D9ce70Aa40E144E8BbE266a0dc3b3F91B6D1D99)
+- Soroban HTLC: [`CDIKSJKVMXKGBRD3BBEBMF7Q4GQJ52ECU6R6G5HEKXKXVGGWK2CTA6JK`](https://stellar.expert/explorer/testnet/contract/CDIKSJKVMXKGBRD3BBEBMF7Q4GQJ52ECU6R6G5HEKXKXVGGWK2CTA6JK)
+- Soroban ResolverRegistry: [`CBSR7Z4MHLPMLFFM5K3PK3YLZAVCOMJ4KPVRWO4VPL3FF64MSTIZ4WGF`](https://stellar.expert/explorer/testnet/contract/CBSR7Z4MHLPMLFFM5K3PK3YLZAVCOMJ4KPVRWO4VPL3FF64MSTIZ4WGF)
+
 ## What's new in v2
 
 | Concern | v1 | v2 |

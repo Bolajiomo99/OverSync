@@ -16,6 +16,19 @@ Legend: ✅ shipped · 🛠 in progress · 🗓 scheduled · ⏳ depends on prio
 
 ---
 
+## Current production status (May 2026)
+
+| Environment | Bridge stack | Decentralization | Live contracts |
+|---|---|---|---|
+| **Testnet** (Sepolia + Stellar testnet) | **v2 — decentralized HTLC + open resolver network** | Multi-resolver, on-chain hashlock/timelock, no privileged custody | EVM: `HTLCEscrow` `0xb352339B…bB178`, `ResolverRegistry` `0x7D9ce70A…1D99`. Soroban: `CDIKSJK…6JK`, `CBSR7Z4…WGF` |
+| **Mainnet** (Ethereum + Stellar public) | **v1 — single-relayer bridge** (legacy) | Trusted relayer; transparent on-chain, but custody during transit | EVM HTLC: `0x87372d4b…b73E`; 1inch escrow factory: `0xa7bcb4ea…df99a` |
+
+This split is deliberate. We refuse to push the v2 stack to mainnet
+before a clean audit, and we refuse to retire the working v1 bridge in
+the meantime — see "Mainnet launch (Q1 2027)" below.
+
+---
+
 ## Q2 2026 — v2.0 rebuild (current quarter)
 
 | Milestone | Status | Deliverable |
