@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import BridgeForm from './components/BridgeForm'
 import DarkVeil from './components/DarkVeil'
 
@@ -42,6 +42,8 @@ function App() {
     return sessionStorage.getItem('oversync:intro-seen') !== 'true';
   });
   const [introLogoReady, setIntroLogoReady] = useState(false);
+  const [introClosing, setIntroClosing] = useState(false);
+  const introStartedAt = useRef(Date.now());
 
   // Freighter hook usage
   const {
@@ -63,11 +65,24 @@ function App() {
 
     sessionStorage.setItem('oversync:intro-seen', 'true');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const timer = window.setTimeout(() => {
-      setShowIntro(false);
-    }, prefersReducedMotion ? 250 : 4350);
+    const originalIntroDuration = prefersReducedMotion ? 250 : 3500;
+    const logoVisibleDelay = prefersReducedMotion ? 0 : 1000;
+    const fadeDuration = prefersReducedMotion ? 0 : 500;
+    const elapsed = Date.now() - introStartedAt.current;
+    const closeDelay = Math.max(originalIntroDuration - elapsed, logoVisibleDelay);
 
-    return () => window.clearTimeout(timer);
+    const closeTimer = window.setTimeout(() => {
+      setIntroClosing(true);
+    }, closeDelay);
+
+    const removeTimer = window.setTimeout(() => {
+      setShowIntro(false);
+    }, closeDelay + fadeDuration);
+
+    return () => {
+      window.clearTimeout(closeTimer);
+      window.clearTimeout(removeTimer);
+    };
   }, [showIntro, introLogoReady]);
 
   // Auto-connect MetaMask if previously connected
@@ -189,7 +204,10 @@ function App() {
   return (
     <div className="app-shell min-h-screen text-white flex flex-col">
       {showIntro && (
-        <div className="intro-screen" aria-label="OverSync loading">
+        <div
+          className={`intro-screen${introLogoReady ? ' intro-screen--ready' : ''}${introClosing ? ' intro-screen--closing' : ''}`}
+          aria-label="OverSync loading"
+        >
           <div className="intro-card">
             <div className="intro-rail">
               <div className="intro-node intro-node-eth">
