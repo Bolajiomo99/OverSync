@@ -370,7 +370,7 @@ function App() {
       <MainnetVersionBanner networkState={networkState} />
 
       {/* Main Content */}
-      <main className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-8 px-4 pb-20 pt-10 md:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,560px)] lg:items-start lg:pt-16">
+      <main className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-8 px-4 pb-24 pt-10 md:px-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,560px)] lg:items-start lg:pt-16">
         <section className="space-y-8">
           <div className="max-w-2xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-200/30 bg-cyan-200/[0.12] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-50/90 shadow-[0_12px_34px_rgba(0,226,255,0.1)]">
@@ -475,7 +475,7 @@ function App() {
       </div>
 
       {/* Footer Bar */}
-      <div className="relative z-10 flex h-9 w-full items-center justify-end border-t border-cyan-200/15 bg-[#03040a]/86 px-6 backdrop-blur-xl">
+      <div className="fixed inset-x-0 bottom-0 z-40 flex h-9 w-full items-center justify-end border-t border-cyan-200/15 bg-[#03040a]/86 px-6 backdrop-blur-xl">
         <a 
           href="https://x.com/kaptan_web3" 
           target="_blank" 

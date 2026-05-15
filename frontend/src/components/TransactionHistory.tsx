@@ -310,7 +310,7 @@ export default function TransactionHistory({ ethAddress, stellarAddress }: Trans
   };
 
   return (
-    <div className="surface-panel flex max-h-[calc(100vh-10rem)] min-h-0 flex-col overflow-hidden rounded-[1.25rem] p-4 shadow-[0_24px_90px_rgba(0,0,0,0.36)] md:p-6 lg:max-h-[calc(100vh-13rem)]">
+    <div className="surface-panel flex max-h-[calc(100dvh-21rem)] min-h-[28rem] flex-col overflow-hidden rounded-[1.25rem] p-4 shadow-[0_24px_90px_rgba(0,0,0,0.36)] md:p-6 lg:max-h-[calc(100dvh-18rem)]">
       <div className="mb-6 flex shrink-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/55">Ledger</p>
