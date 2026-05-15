@@ -39,10 +39,7 @@ body {
 
 body {
   min-height: 100vh;
-  background:
-    linear-gradient(118deg, rgba(67, 97, 238, 0.16) 0 18%, transparent 34%),
-    linear-gradient(236deg, rgba(124, 140, 255, 0.11) 0 15%, transparent 34%),
-    linear-gradient(180deg, #070a18 0%, #03040a 52%, #05050b 100%);
+  background: linear-gradient(180deg, #050713 0%, #03040a 48%, #05050b 100%);
   background-attachment: fixed;
   background-size: cover;
 }
@@ -64,24 +61,31 @@ body::selection {
   z-index: -20;
   pointer-events: none;
   background:
-    linear-gradient(112deg, transparent 0 15%, rgba(67, 97, 238, 0.22) 20%, transparent 36%),
-    linear-gradient(153deg, transparent 0 58%, rgba(124, 58, 237, 0.12) 64%, transparent 79%);
-  opacity: 0.76;
-  filter: saturate(1.04);
+    linear-gradient(180deg, rgba(17, 24, 50, 0.54) 0%, rgba(3, 4, 10, 0.18) 42%, rgba(3, 4, 10, 0.72) 100%);
+  opacity: 1;
 }
 
 .background-depth {
-  opacity: 0.9;
+  opacity: 1;
+}
+
+.dark-veil-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0.92;
+  filter: saturate(0.84) contrast(1.08) brightness(0.9);
+  mix-blend-mode: screen;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.92) 62%, rgba(0, 0, 0, 0.5) 100%);
 }
 
 .background-grid {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(114, 226, 255, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(114, 226, 255, 0.06) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.88), transparent 82%);
+    linear-gradient(rgba(142, 160, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(142, 160, 255, 0.018) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.28) 58%, transparent 92%);
 }
 
 .background-scanline {
@@ -90,12 +94,12 @@ body::selection {
   background:
     repeating-linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.035) 0,
-      rgba(255, 255, 255, 0.035) 1px,
+      rgba(255, 255, 255, 0.018) 0,
+      rgba(255, 255, 255, 0.018) 1px,
       transparent 1px,
-      transparent 8px
+      transparent 10px
     );
-  opacity: 0.25;
+  opacity: 0.08;
 }
 
 /* Input number styling */
