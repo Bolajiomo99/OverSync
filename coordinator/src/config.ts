@@ -1,6 +1,7 @@
 import { config as dotenvConfig } from "dotenv";
 import { resolve } from "node:path";
 import { z } from "zod";
+import { resolveEthereumRpcUrl } from "./ethereum-rpc-url.js";
 
 dotenvConfig({ path: resolve(process.cwd(), ".env") });
 
@@ -53,9 +54,7 @@ export function loadConfig(): CoordinatorConfig {
     corsOrigin: process.env.CORS_ORIGIN ?? "*",
     pollIntervalMs: process.env.COORDINATOR_POLL_INTERVAL_MS ?? "15000",
     ethereum: {
-      rpcUrl: isMainnet
-        ? (process.env.MAINNET_RPC_URL ?? process.env.ETHEREUM_RPC_URL ?? "")
-        : (process.env.SEPOLIA_RPC_URL ?? ""),
+      rpcUrl: resolveEthereumRpcUrl(isMainnet ? "mainnet" : "testnet"),
       chainId: isMainnet ? 1 : 11_155_111,
       htlcEscrow: process.env[isMainnet ? "ETH_HTLC_ESCROW_MAINNET" : "ETH_HTLC_ESCROW_TESTNET"] ?? "",
       resolverRegistry:

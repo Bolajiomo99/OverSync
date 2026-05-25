@@ -31,6 +31,8 @@ export interface ResolverConfig {
   soroban: SorobanConfig;
 }
 
+import { resolveEthereumRpcUrl } from "./ethereum-rpc-url.js";
+
 function requireEnv(name: string): string {
   const v = process.env[name];
   if (!v) {
@@ -62,7 +64,7 @@ export function loadConfig(): ResolverConfig {
     coordinatorUrl: process.env.COORDINATOR_URL ?? "http://localhost:3001",
     logLevel: (process.env.LOG_LEVEL as ResolverConfig["logLevel"]) ?? "info",
     ethereum: {
-      rpcUrl: requireEnv(isMainnet ? "MAINNET_RPC_URL" : "SEPOLIA_RPC_URL"),
+      rpcUrl: resolveEthereumRpcUrl(isMainnet ? "mainnet" : "testnet"),
       chainId: isMainnet ? 1 : 11_155_111,
       htlcEscrow: optionalAddress(isMainnet ? "ETH_HTLC_ESCROW_MAINNET" : "ETH_HTLC_ESCROW_TESTNET"),
       resolverRegistry: optionalAddress(

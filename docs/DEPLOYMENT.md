@@ -25,10 +25,17 @@ At minimum, set:
 
 ```
 NETWORK_MODE=testnet
-SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
+INFURA_API_KEY=<your_infura_project_key>
+# or: SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/<key>
 SOROBAN_RPC_URL=https://soroban-testnet.stellar.org
 ETHERSCAN_API_KEY=<key>
 ```
+
+Backend services resolve the EVM RPC in this order: explicit
+`SEPOLIA_RPC_URL` / `MAINNET_RPC_URL`, then `INFURA_API_KEY`, then a
+public fallback. Production (DigitalOcean) should use Infura — keep the
+polling optimisations deployed so the free tier is not exhausted by
+background listeners.
 
 You will fill in the deployed contract addresses later.
 

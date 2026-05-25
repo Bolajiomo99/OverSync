@@ -29,7 +29,7 @@ misbehaving resolver is forfeiting its own stake via on-chain slashing.
 
 - Node.js 20+
 - Docker (optional, for the reference image)
-- Ethereum RPC URL (Alchemy/Infura) for the network you're running on
+- Ethereum RPC URL (Infura recommended) for the network you're running on
 - Soroban RPC URL (`https://soroban-testnet.stellar.org` for testnet)
 - A funded Ethereum address (gas + stake asset)
 - A funded Stellar account (for Soroban auth + transaction fees)
@@ -46,7 +46,8 @@ Set at least these variables:
 
 ```
 NETWORK_MODE=testnet
-SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
+INFURA_API_KEY=<your_infura_project_key>
+# or: SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/<key>
 SOROBAN_RPC_URL=https://soroban-testnet.stellar.org
 ETH_HTLC_ESCROW_TESTNET=<from deployments.testnet.json>
 ETH_RESOLVER_REGISTRY_TESTNET=<from deployments.testnet.json>

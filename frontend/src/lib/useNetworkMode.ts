@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import freighterApi from '@stellar/freighter-api';
 import { isMainnetEnabled, isTestnet, resolveNetworkMode } from '../config/networks';
+import { resolveViteMainnetRpcUrl, resolveViteSepoliaRpcUrl } from '../config/rpc-urls';
 
 export type NetworkMode = 'testnet' | 'mainnet';
 
@@ -10,13 +11,9 @@ const ETH_SEPOLIA_CHAIN_ID_HEX = '0xaa36a7';
 const STELLAR_MAINNET_PASSPHRASE = 'Public Global Stellar Network ; September 2015';
 const STELLAR_TESTNET_PASSPHRASE = 'Test SDF Network ; September 2015';
 
-const MAINNET_RPC_URL =
-  (import.meta as any).env?.VITE_MAINNET_RPC_URL ||
-  'https://eth.llamarpc.com';
+const MAINNET_RPC_URL = resolveViteMainnetRpcUrl();
 
-const SEPOLIA_RPC_URL =
-  (import.meta as any).env?.VITE_SEPOLIA_RPC_URL ||
-  'https://ethereum-sepolia-rpc.publicnode.com';
+const SEPOLIA_RPC_URL = resolveViteSepoliaRpcUrl();
 
 /** Normalize eth_chainId responses (0xaa36a7 vs 11155111 vs mixed case). */
 function normalizeChainId(chainId: string | null): string | null {

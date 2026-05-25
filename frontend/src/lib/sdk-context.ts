@@ -2,6 +2,7 @@ import { createPublicClient, createWalletClient, custom, http, type Address } fr
 import { mainnet, sepolia } from "viem/chains";
 import { EthereumHTLCClient } from "@oversync/sdk";
 import { isTestnet } from "../config/networks";
+import { resolveViteMainnetRpcUrl, resolveViteSepoliaRpcUrl } from "../config/rpc-urls";
 
 function htlcAddress(): Address | null {
   const env = (import.meta as any).env;
@@ -27,9 +28,7 @@ export async function makeEthereumHTLCClient(userAddress: Address): Promise<Ethe
   if (typeof window === "undefined" || !window.ethereum) return null;
 
   const chain = isTestnet() ? sepolia : mainnet;
-  const rpcUrl = isTestnet()
-    ? (import.meta as any).env.VITE_SEPOLIA_RPC_URL
-    : (import.meta as any).env.VITE_MAINNET_RPC_URL;
+  const rpcUrl = isTestnet() ? resolveViteSepoliaRpcUrl() : resolveViteMainnetRpcUrl();
 
   const publicClient = createPublicClient({
     chain,

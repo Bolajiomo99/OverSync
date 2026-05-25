@@ -2,6 +2,8 @@
  * Network Configuration for FusionBridge
  */
 
+import { resolveViteMainnetRpcUrl, resolveViteSepoliaRpcUrl } from './rpc-urls';
+
 export type AppNetworkMode = 'mainnet' | 'testnet';
 
 /**
@@ -69,7 +71,7 @@ export const ETHEREUM_NETWORKS: Record<string, NetworkConfig> = {
     id: 1,
     name: 'ethereum',
     displayName: 'Ethereum Mainnet',
-    rpcUrl: (import.meta as any).env?.VITE_MAINNET_RPC_URL || 'https://ethereum-rpc.publicnode.com',
+    rpcUrl: resolveViteMainnetRpcUrl(),
     explorerUrl: 'https://etherscan.io',
     escrowFactory: '0xa7bCb4EAc8964306F9e3764f67Db6A7af6DdF99A', // 1inch Escrow Factory
     nativeCurrency: {
@@ -83,7 +85,7 @@ export const ETHEREUM_NETWORKS: Record<string, NetworkConfig> = {
     id: 11155111,
     name: 'sepolia',
     displayName: 'Sepolia Testnet',
-    rpcUrl: (import.meta as any).env?.VITE_SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com',
+    rpcUrl: resolveViteSepoliaRpcUrl(),
     explorerUrl: 'https://sepolia.etherscan.io',
     escrowFactory: '0x3f344ACDd17a0c4D21096da895152820f595dc8A', // Testnet HTLC Bridge
     nativeCurrency: {

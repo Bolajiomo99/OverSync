@@ -25,6 +25,7 @@ import {
   hasRecentVisitor,
   markVisitorPresent,
 } from './site-presence.js';
+import { resolveEthereumRpcUrl } from './ethereum-rpc-url.js';
 
 // Load environment variables from root directory
 config({ path: resolve(process.cwd(), '../.env') });
@@ -365,19 +366,9 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number, errorMessage: st
   ]);
 }
 
-function resolveEthereumRpcUrl(): string {
-  if (DEFAULT_NETWORK_MODE === 'testnet') {
-    return (
-      process.env.SEPOLIA_RPC_URL ||
-      process.env.ETHEREUM_RPC_URL ||
-      'https://ethereum-sepolia-rpc.publicnode.com'
-    );
-  }
-  return (
-    process.env.MAINNET_RPC_URL ||
-    process.env.ETHEREUM_RPC_URL ||
-    'https://ethereum-rpc.publicnode.com'
-  );
+function resolveEthereumRpcUrlForRelayer(): string {
+  const network = DEFAULT_NETWORK_MODE === 'mainnet' ? 'mainnet' : 'testnet';
+  return resolveEthereumRpcUrl(network);
 }
 
 // Relayer configuration from environment variables
@@ -401,7 +392,7 @@ export const RELAYER_CONFIG = {
   // Ethereum configuration
   ethereum: {
     network: process.env.ETHEREUM_NETWORK || 'mainnet',
-    rpcUrl: resolveEthereumRpcUrl(),
+    rpcUrl: resolveEthereumRpcUrlForRelayer(),
     // ✅ Dynamic contract addresses based on network
     contractAddress: getHtlcBridgeAddress(DEFAULT_NETWORK_MODE), // For EthereumEventListener (testnet only)
     escrowFactoryAddress: getEscrowFactoryAddress(DEFAULT_NETWORK_MODE), // For transactions (mainnet + testnet)
@@ -1353,9 +1344,7 @@ async function initializeRelayer() {
         try {
           // ✅ NETWORK-AWARE: Detect if this order was created for testnet
           const orderNetworkMode = storedOrder.networkMode || 'mainnet'; // Check stored network
-          const rpcUrl = orderNetworkMode === 'testnet' 
-            ? (process.env.SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com')
-            : (process.env.ETHEREUM_RPC_URL || 'https://ethereum-rpc.publicnode.com');
+          const rpcUrl = resolveEthereumRpcUrl(orderNetworkMode === 'testnet' ? 'testnet' : 'mainnet');
           const privateKey = process.env.RELAYER_PRIVATE_KEY;
           
           console.log(`🌐 XLM→ETH Network Detection: ${orderNetworkMode.toUpperCase()}`);
@@ -1827,9 +1816,7 @@ async function initializeRelayer() {
       try {
         // ✅ NETWORK-AWARE: Use request network first, fallback to stored order
         const orderNetworkMode = requestNetwork || storedOrder?.networkMode || 'mainnet';
-        const rpcUrl = orderNetworkMode === 'testnet' 
-          ? (process.env.SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com')
-          : (process.env.ETHEREUM_RPC_URL || 'https://ethereum-rpc.publicnode.com');
+        const rpcUrl = resolveEthereumRpcUrl(orderNetworkMode === 'testnet' ? 'testnet' : 'mainnet');
         const privateKey = process.env.RELAYER_PRIVATE_KEY;
         
         console.log(`🌐 XLM→ETH Network Detection (2nd endpoint): ${orderNetworkMode.toUpperCase()}`);
@@ -1841,7 +1828,7 @@ async function initializeRelayer() {
         if (rpcUrl.includes('YOUR_') || rpcUrl.includes('api_key_here')) {
           return res.status(500).json({
             error: 'RPC URL not configured',
-            message: `Set ${orderNetworkMode === 'testnet' ? 'SEPOLIA_RPC_URL' : 'ETHEREUM_RPC_URL'} in environment variables`
+            message: `Set SEPOLIA_RPC_URL / MAINNET_RPC_URL or INFURA_API_KEY in environment variables`
           });
         }
         
@@ -2451,7 +2438,9 @@ async function initializeRelayer() {
       console.log('🏭 Creating ETH HTLC for verified XLM payment:', orderId);
       
       try {
-        const provider = new ethers.JsonRpcProvider(process.env.ETHEREUM_RPC_URL);
+        const provider = new ethers.JsonRpcProvider(
+          resolveEthereumRpcUrl(RELAYER_CONFIG.ethereum.network === 'mainnet' ? 'mainnet' : 'testnet')
+        );
         const relayerWallet = new ethers.Wallet(process.env.RELAYER_PRIVATE_KEY!, provider);
         
         // Check relayer balance first
