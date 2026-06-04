@@ -349,6 +349,9 @@ importers:
 
   stellar:
     dependencies:
+      '@oversync/sdk':
+        specifier: ^0.1.0
+        version: link:../packages/sdk
       '@stellar/stellar-sdk':
         specifier: ^11.2.0
         version: 11.3.0
