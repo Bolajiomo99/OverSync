@@ -96,6 +96,7 @@ source code or block explorer.
 | EVM ResolverRegistry | 6 | Hardhat + Chai | yes |
 | SDK | 8 | Vitest | yes |
 | Coordinator | 4 | Vitest | yes |
+| Cross-chain e2e (real EVM + Soroban sim) | 19 | Vitest + Hardhat node | yes |
 
 ---
 
@@ -211,8 +212,15 @@ pnpm --filter @oversync/contracts exec hardhat test test/v2
 cd soroban && cargo test --release && cd ..
 
 # Run the cross-chain differential test harness (EVM ↔ Soroban hashlock
-# parity, using the shared @oversync/sdk secret helpers). No live RPC
-# required — the harness drives in-memory simulators of each chain.
+# parity). The harness drives both TypeScript simulators and a real
+# HTLCEscrow deployed on a temporary local Hardhat node.
+#
+# The test runner automatically:
+# - Compiles the Solidity contracts
+# - Starts a local Hardhat node
+# - Stops the node when the tests finish
+#
+# No manual Hardhat node is required.
 pnpm test:e2e
 
 # Run coordinator
