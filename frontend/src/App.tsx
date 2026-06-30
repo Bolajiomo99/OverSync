@@ -11,6 +11,7 @@ import { pingBackendWake } from './lib/wakeBackend'
 import { isMainnetEnabled } from './config/networks'
 import NetworkMismatchBanner from './components/NetworkMismatchBanner'
 import MainnetVersionBanner from './components/MainnetVersionBanner'
+import TestnetTractionCard from './components/TestnetTractionCard'
 import {
   Activity,
   ArrowRightLeft,
@@ -486,6 +487,8 @@ function App() {
               </div>
             </div>
           </div>
+
+          <TestnetTractionCard />
         </section>
 
         <section className="w-full lg:w-[640px] lg:max-w-none lg:justify-self-start">
